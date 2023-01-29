@@ -1,0 +1,27 @@
+{
+  "name": "deel-task",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "4.17.1",
+    "express-validator": "^6.14.3",
+    "sequelize": "^6.3.4",
+    "sqlite3": "^5.1.4",
+    "swagger-ui-express": "^4.6.0",
+    "swagger-autogen": "^2.23.0"
+  },
+  "scripts": {
+    "start": "nodemon ./src/server.js",
+    "seed": "node ./scripts/seedDb.js",
+    "swagger-autogen": "node swagger.js"
+  },
+  "devDependencies": {
+    "concurrently": "4.1.0",
+    "nodemon": "1.19.1"
+  },
+  "engines": {
+    "node": ">=10.16.3"
+  },
+  "engineStrict": true
+}

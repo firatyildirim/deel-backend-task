@@ -1,0 +1,282 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Deel",
+    "description": "Deel Backend Task"
+  },
+  "host": "localhost:3001",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Contracts",
+      "description": "Contract Fetch Operations"
+    },
+    {
+      "name": "Job",
+      "description": "Job Fetch and Update Operations"
+    },
+    {
+      "name": "Balance",
+      "description": "Balance Altering operations"
+    },
+    {
+      "name": "Admin",
+      "description": "Generate Reports"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "securityDefinitions": {
+    "profile_id": {
+      "type": "apiKey",
+      "name": "profile_id",
+      "in": "header"
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/contracts/{id}": {
+      "get": {
+        "tags": [
+          "Contracts"
+        ],
+        "description": "Get a contract with Id belong to authorized profile",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "profile_id": []
+          }
+        ]
+      }
+    },
+    "/contracts": {
+      "get": {
+        "tags": [
+          "Contracts"
+        ],
+        "description": "Returns a list of contracts belonging to a user (client or contractor), the list should only contain non terminated contracts.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "profile_id": []
+          }
+        ]
+      }
+    },
+    "/jobs/unpaid": {
+      "get": {
+        "tags": [
+          "Job"
+        ],
+        "description": "Get all unpaid jobs for a user (either a client or contractor), for active contracts only.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "profile_id": []
+          }
+        ]
+      }
+    },
+    "/jobs/{job_id}/pay": {
+      "post": {
+        "tags": [
+          "Job"
+        ],
+        "description": "Get all active contracts belong to authorized profile",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "profile_id": []
+          }
+        ]
+      }
+    },
+    "/balances/deposit/{userId}": {
+      "post": {
+        "tags": [
+          "Balance"
+        ],
+        "description": " Deposits money into the the the balance of a client, a client can",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "type": "string",
+                  "example": "number"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/admin/best-profession": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Returns the profession that earned the most money (sum of jobs paid) for any contactor that worked in the query time range.",
+        "parameters": [
+          {
+            "name": "end",
+            "required": true,
+            "in": "query",
+            "description": "end",
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "start",
+            "required": true,
+            "in": "query",
+            "description": "start",
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/admin/best-clients": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "returns the clients the paid the most for jobs in the query time period. limit query parameter should be applied, default limit is 2.",
+        "parameters": [
+          {
+            "name": "end",
+            "required": true,
+            "in": "query",
+            "description": "end",
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "start",
+            "required": true,
+            "in": "query",
+            "description": "start",
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "type": "number",
+            "minimum": "0"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  }
+}
